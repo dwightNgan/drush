@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <span>size</span>
+      <input id="size" value="40" type="range" min="1" max="100">
+    </div>
+    <div>
+      <span>spacing</span>
+      <input id="spacing" value="1" type="range" min="1" max="50">
+    </div>
+    <div>
+      <button class="brush" id="rect">方形</button>
+      <button class="brush" id="dot">圆形</button>
+      <button class="brush" id="featherBrush">羽化笔刷</button>
+      <button class="brush" id="ranbowBrush">彩虹笔</button>
+      <button class="brush" id="chalk">粉笔</button>
+      <button class="brush" id="writingBrush">毛笔</button>
+      <button class="brush" id="charcoal">炭笔</button>
+      <button class="brush" id="butterfly">蝴蝶笔</button>
+    </div>
+    <br>
+    <canvas width="800" height="800"></canvas>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
