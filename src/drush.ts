@@ -6,19 +6,19 @@ import { lineUp } from "./line/bresenham";
 export default class Drush {
   drawing: boolean = false;
   currentLine: IPoint[] = [];
-  brushPattern: IPattern;
+  pattern: IPattern;
   lineUp: typeof lineUp = lineUp;
   constructor (public ctx: CanvasRenderingContext2D) {
     this.drawing = false;
-    this.brushPattern = new Dot();
+    this.pattern = new Dot();
   }
 
-  setBrushOptions(options: Partial<typeof this.brushPattern.options> & { [k: string]: any }) {
-    this.brushPattern.setOptions(options);
+  setOptions(options: Partial<typeof this.pattern.options> & { [k: string]: any }) {
+    this.pattern.setOptions(options);
   }
 
-  setBrushPattern(pattern: IPattern) {
-    this.brushPattern = pattern;
+  setPattern(pattern: IPattern) {
+    this.pattern = pattern;
   }
 
   addPoint(point: IPoint) {
@@ -27,8 +27,8 @@ export default class Drush {
     if (lastPoint && lastPoint.x === x && lastPoint.y === y) {
       return;
     }
-    if (lastPoint && this.brushPattern.pointFilter) {
-      if (!this.brushPattern.pointFilter(lastPoint, { x, y })) {
+    if (lastPoint && this.pattern.pointFilter) {
+      if (!this.pattern.pointFilter(lastPoint, { x, y })) {
         return;
       }
     }
@@ -41,7 +41,7 @@ export default class Drush {
   }
   @DrawCheck
   draw() {
-    const brush = this.brushPattern;
+    const brush = this.pattern;
     const { spacing } = brush.options;
     const points = this.currentLine.slice(-2);
     const drawPattern = (point: IPoint) => {
@@ -49,7 +49,7 @@ export default class Drush {
       if (brush.beforeDrawing) {
         brush.beforeDrawing(point);
       }
-      this.ctx.drawImage(this.brushPattern.image, point.x + offset.x, point.y + offset.y)
+      this.ctx.drawImage(this.pattern.image, point.x + offset.x, point.y + offset.y)
     }
     if (points.length === 1) {
       drawPattern(points[0])
@@ -61,16 +61,16 @@ export default class Drush {
     this.currentLine.splice(-1, 1, endPoint);
   }
 
-  mousedown(point: IPoint){
+  moveTo(point: IPoint){
     this.drawing = true;
     this.addPoint(point);
   }
   @DrawCheck
-  mousemove(point: IPoint){
+  lineTo(point: IPoint){
     this.addPoint(point);
   }
   @DrawCheck
-  mouseup(point: IPoint) {
+  stop(point: IPoint) {
     this.addPoint(point);
     this.drawing = false;
     this.clearLine();

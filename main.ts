@@ -15,6 +15,10 @@ const ctx = cvs.getContext('2d') as CanvasRenderingContext2D;
 const size = document.querySelector('#size') as HTMLInputElement;
 const spacing = document.querySelector('#spacing') as HTMLInputElement;
 const brushes = document.querySelectorAll<HTMLButtonElement>('.brush');
+const clearBtn = document.querySelector<HTMLButtonElement>('#clear');
+clearBtn?.addEventListener('click', () => {
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+})
 const brushset = {
   rect: new Rect(),
   dot: new Dot(),
@@ -38,37 +42,37 @@ function cursorToCvsCoord (e: MouseEvent): IPoint {
 }
 
 function mousedown(e: MouseEvent) {
-  drush.mousedown(cursorToCvsCoord(e));
+  drush.moveTo(cursorToCvsCoord(e));
 }
 
 function mousemove(e: MouseEvent) {
-  drush.mousemove(cursorToCvsCoord(e));
+  drush.lineTo(cursorToCvsCoord(e));
 }
 
 function mouseup(e: MouseEvent) {
-  drush.mouseup(cursorToCvsCoord(e));
+  drush.stop(cursorToCvsCoord(e));
 }
-drush.setBrushOptions({
+drush.setOptions({
   size: +size.value,
   spacing: +spacing.value
 });
 function changeSize(e: Event) {
   const { value } = e.target as HTMLInputElement;
-  drush.setBrushOptions({
+  drush.setOptions({
     size: +value
   });
 }
 function changeGap(e: Event) {
   const { value } = e.target as HTMLInputElement;
-  drush.setBrushOptions({
+  drush.setOptions({
     spacing: +value
   });
 }
 
 function changeBrush(e: MouseEvent) {
   const brushName = (e.target as HTMLElement).id;
-  drush.setBrushPattern(brushset[brushName]);
-  drush.setBrushOptions({
+  drush.setPattern(brushset[brushName]);
+  drush.setOptions({
     size: +size.value,
     spacing: +spacing.value,
   })
@@ -84,8 +88,8 @@ brushes.forEach((button) => {
 })
 
 function mock(a: IPoint, b: IPoint) {
-  drush.setBrushPattern(new ScatterPlot())
-  drush.setBrushOptions({
+  drush.setPattern(new ScatterPlot())
+  drush.setOptions({
     spacing: 50,
     size: 100
   })
