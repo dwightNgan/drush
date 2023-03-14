@@ -1,8 +1,6 @@
-import BasePattern from "./base";
+import BasePattern, { IPattenOptions } from "./base";
 import writingBrushImg from '../assets/writing-brush.png';
 import { getContext, loadImg } from "../utils";
-import { IPattenOptions } from "../types/msic";
-
 
 export class WritingBrush<T extends IPattenOptions = IPattenOptions> extends BasePattern<T> {
   brushImg: HTMLImageElement | null = null;

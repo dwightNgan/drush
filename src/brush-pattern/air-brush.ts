@@ -1,8 +1,9 @@
 import Color from 'color';
-import { IPattenOptions, IPoint } from '../types/msic';
+import { IPoint } from '../types/msic';
 import { getContext, rotateImage } from "../utils";
 import { WritingBrush } from "./writing-brush";
 import airBrushImg from '../assets/air-brush.png';
+import { IPattenOptions } from './base';
 
 interface IAirBrushOptions extends IPattenOptions {
   rotate: number

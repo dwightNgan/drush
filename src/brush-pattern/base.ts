@@ -1,13 +1,29 @@
 import Color from "color";
-import { IPattenOptions, IPattern, IPoint } from "../types/msic";
-import { createCanvas, distance, getContext, objHas } from "../utils";
+import { IPoint } from "../types/msic";
+import { createCanvas, getContext, objHas } from "../utils";
+
+export interface IPattern<T extends IPattenOptions = IPattenOptions> {
+  image: HTMLCanvasElement;
+  options: T;
+  setOptions(options: Partial<T> & { [k: string]: any }): void;
+  drawPattern(): void;
+  pointFilter?(a: IPoint, b: IPoint): boolean;
+  beforeDrawing?(point: IPoint): void;
+}
+
+
+export interface IPattenOptions {
+  color: Color;
+  size: number;
+  spacing: number;
+}
 
 export default class BasePattern<T extends IPattenOptions = IPattenOptions> implements IPattern<T>{
   image: HTMLCanvasElement = createCanvas(1, 1).cvs;
   
   options: T = {
     size: 25,
-    color: Color('#000'),
+    color: Color('#000').alpha(0.1),
     spacing: 1
   } as T;
 
@@ -33,11 +49,4 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
   drawPattern(): void {}
 
   beforeDrawing(_point: IPoint) {}
-
-  pointFilter(a: IPoint, b: IPoint) {
-    if (this.options.spacing <= 1) {
-      return true;
-    }
-    return distance(a, b) >= this.options.spacing
-  }
 }

@@ -1,6 +1,5 @@
-import { IPattenOptions } from "../types/msic";
 import { deg, getContext } from "../utils";
-import BasePattern from "./base";
+import BasePattern, { IPattenOptions } from "./base";
 
 
 
