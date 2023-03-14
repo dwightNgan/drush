@@ -91,12 +91,10 @@ function mock(a: IPoint, b: IPoint) {
   drush.setPattern(new ScatterPlot())
   drush.setOptions({
     spacing: 50,
-    size: 100
+    size: 10
   })
-  drush.currentLine.push(a, b);
-  drush.drawing = true;
-  drush.draw();
-  drush.drawing = false;
+  drush.moveTo(a);
+  drush.stop(b);
 }
 
 // // 第一象限，不陡

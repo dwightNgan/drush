@@ -34,7 +34,7 @@ export default class Drush {
       return;
     }
     if (start) {
-      const [,...newPoints] = this.lineAlgo.lineUp(start, point, (x, y) => {
+      const newPoints = this.lineAlgo.lineUp(start, point, (x, y) => {
         this.draw({ x, y })
       })
       this.currentLine.push(...newPoints);

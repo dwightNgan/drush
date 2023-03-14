@@ -4,6 +4,7 @@ import { distance } from "../utils";
 export interface ILineUpOptions {
   spacing: number;
   endPointValidate?: (startPoint: IPoint, endPoint: IPoint) => boolean;
+  ingoreStartPoint?: boolean;
 }
 
 function validateDistance(a: IPoint, b: IPoint, spacing: number) {
@@ -11,7 +12,7 @@ function validateDistance(a: IPoint, b: IPoint, spacing: number) {
 }
 
 export function lineUp(a: IPoint, b: IPoint, plot: (x: number, y: number) => void, options: ILineUpOptions = { spacing: 1 }) {
-  const { spacing, endPointValidate = validateDistance } = options;
+  const { spacing, endPointValidate = validateDistance, ingoreStartPoint = false } = options;
   let { x: x0, y: y0 } = a;
   let { x: x1, y: y1 } = b;
   let dx = x1 - x0;
@@ -41,13 +42,16 @@ export function lineUp(a: IPoint, b: IPoint, plot: (x: number, y: number) => voi
   let absDx = Math.abs(dx);
   let p = -absDx / 2;
   let baseYStep = dy > 0 ? 1 : -1;
+  let isStartPoint = true;
   while (x !== x1) {
-    if (!steep) {
-      plot(x, y)
-      points.push({x, y});
-    } else {
-      plot(y, x);
-      points.push({x: y, y: x});
+    if (!ingoreStartPoint || !isStartPoint) {
+      if (!steep) {
+        plot(x, y)
+        points.push({x, y});
+      } else {
+        plot(y, x);
+        points.push({x: y, y: x});
+      }
     }
     for (let i = 0; i < absXStep; i++) {
       p += absDy
@@ -66,6 +70,7 @@ export function lineUp(a: IPoint, b: IPoint, plot: (x: number, y: number) => voi
         break;
       }
     }
+    isStartPoint = false;
   }
   // console.log('end', !steep ? [x, y] : [y, x]);
   return points
