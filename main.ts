@@ -16,6 +16,7 @@ const size = document.querySelector('#size') as HTMLInputElement;
 const spacing = document.querySelector('#spacing') as HTMLInputElement;
 const brushes = document.querySelectorAll<HTMLButtonElement>('.brush');
 const clearBtn = document.querySelector<HTMLButtonElement>('#clear');
+const sizeJitter = document.querySelector<HTMLButtonElement>('#sizeJitter') as HTMLInputElement;
 clearBtn?.addEventListener('click', () => {
   ctx.clearRect(0, 0, cvs.width, cvs.height);
 })
@@ -78,11 +79,19 @@ function changeBrush(e: MouseEvent) {
   })
 }
 
+function changeSiseJitter(e: MouseEvent) {
+  const { value } = e.target as HTMLInputElement;
+  drush.setJitter({
+    size: +value
+  });
+}
+
 cvs.addEventListener('mousedown', mousedown)
 cvs.addEventListener('mousemove', mousemove)
 cvs.addEventListener('mouseup', mouseup)
 size.addEventListener('input', changeSize)
 spacing.addEventListener('input', changeGap)
+sizeJitter.addEventListener('input', changeSiseJitter)
 brushes.forEach((button) => {
   button.addEventListener('click', changeBrush);
 })

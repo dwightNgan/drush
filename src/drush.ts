@@ -21,6 +21,10 @@ export default class Drush {
     this.lineAlgo.setEndPointValidate(this.pattern.pointFilter)
   }
 
+  setJitter(jitter: typeof this.pattern.options.jitter) {
+    this.pattern.setJitter(jitter);
+  }
+
   setPattern(pattern: IPattern) {
     this.pattern = pattern;
     this.lineAlgo.setSpacing(this.pattern.options.spacing);
@@ -47,11 +51,13 @@ export default class Drush {
 
   draw(point: IPoint) {
     const brush = this.pattern;
-    let offset = { x: 0, y: 0 }
     if (brush.beforeDrawing) {
       brush.beforeDrawing(point);
     }
-    this.ctx.drawImage(this.pattern.image, point.x + offset.x, point.y + offset.y)
+    const image = this.pattern.getImage();
+    let offset = { x: image.width / 2, y: image.height / 2 };
+
+    this.ctx.drawImage(image, point.x - offset.x, point.y - offset.y)
   }
 
   moveTo(point: IPoint){
