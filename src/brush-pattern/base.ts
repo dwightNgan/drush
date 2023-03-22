@@ -1,6 +1,6 @@
 import Color from "color";
 import { IPoint } from "../types/msic";
-import { createCanvas, getContext, objHas } from "../utils";
+import { createCanvas, deg, getContext, objHas } from "../utils";
 
 export interface IPattern<T extends IPattenOptions = IPattenOptions> {
   image: HTMLCanvasElement;
@@ -18,6 +18,7 @@ export interface IPattenOptions {
   color: Color;
   size: number;
   spacing: number;
+  roundness: number;
   jitter: {
     size: number;
   }
@@ -37,6 +38,7 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
     size: 25,
     color: Color('#000'),
     spacing: 1,
+    roundness: 1,
     jitter: {}
   } as T;
 
@@ -47,7 +49,7 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
 
   setOptions(options: Partial<typeof this.options>) {
     Object.assign(this.options, options);
-    if (objHas(options, 'color') || objHas(options, 'size')) {
+    if (objHas(options, 'color') || objHas(options, 'size') ||  objHas(options, 'roundness')) {
       this.drawPattern();
     }
   }

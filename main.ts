@@ -12,11 +12,8 @@ import { ScatterPlot } from './src/brush-pattern/scatter-plot'
 
 const cvs = document.querySelector('canvas') as HTMLCanvasElement;
 const ctx = cvs.getContext('2d') as CanvasRenderingContext2D;
-const size = document.querySelector('#size') as HTMLInputElement;
-const spacing = document.querySelector('#spacing') as HTMLInputElement;
 const brushes = document.querySelectorAll<HTMLButtonElement>('.brush');
 const clearBtn = document.querySelector<HTMLButtonElement>('#clear');
-const sizeJitter = document.querySelector<HTMLButtonElement>('#sizeJitter') as HTMLInputElement;
 clearBtn?.addEventListener('click', () => {
   ctx.clearRect(0, 0, cvs.width, cvs.height);
 })
@@ -54,21 +51,11 @@ function mouseup(e: MouseEvent) {
   drush.stop(cursorToCvsCoord(e));
 }
 drush.setOptions({
-  size: +size.value,
-  spacing: +spacing.value
+  size: 40,
+  spacing: 1
 });
-function changeSize(e: Event) {
-  const { value } = e.target as HTMLInputElement;
-  drush.setOptions({
-    size: +value
-  });
-}
-function changeGap(e: Event) {
-  const { value } = e.target as HTMLInputElement;
-  drush.setOptions({
-    spacing: +value
-  });
-}
+
+
 
 function changeBrush(e: MouseEvent) {
   const brushName = (e.target as HTMLElement).id;
@@ -79,19 +66,42 @@ function changeBrush(e: MouseEvent) {
   })
 }
 
-function changeSiseJitter(e: MouseEvent) {
-  const { value } = e.target as HTMLInputElement;
-  drush.setJitter({
-    size: +value
-  });
-}
+
 
 cvs.addEventListener('mousedown', mousedown)
 cvs.addEventListener('mousemove', mousemove)
 cvs.addEventListener('mouseup', mouseup)
-size.addEventListener('input', changeSize)
-spacing.addEventListener('input', changeGap)
-sizeJitter.addEventListener('input', changeSiseJitter)
+
+const size = document.querySelector('#size') as HTMLInputElement;
+const spacing = document.querySelector('#spacing') as HTMLInputElement;
+
+const paramFns = {
+  size: function changeSize(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setOptions({ size: +value });
+  },
+  spacing: function changeSpacing(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setOptions({ spacing: +value });
+  },
+  sizeJitter: function changeSiseJitter(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setJitter({ size: +value });
+  },
+  roundness: function changeRoundness(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setOptions({ roundness: +value });
+  }
+}
+
+
+Object.entries(paramFns).forEach(([id, fn]) => {
+  document.querySelector<HTMLInputElement>(`#${id}`)?.addEventListener('input', fn);
+})
+
+// size.addEventListener('input', changeSize)
+// spacing.addEventListener('input', changeSpacing)
+// sizeJitter.addEventListener('input', changeSiseJitter)
 brushes.forEach((button) => {
   button.addEventListener('click', changeBrush);
 })
