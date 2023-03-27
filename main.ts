@@ -91,6 +91,10 @@ const paramFns = {
   roundness: function changeRoundness(e: Event) {
     const { value } = e.target as HTMLInputElement;
     drush.setOptions({ roundness: +value });
+  },
+  angle: function changeAngle(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setOptions({ angle: +value });
   }
 }
 
