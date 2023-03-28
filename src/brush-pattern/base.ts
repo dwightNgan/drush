@@ -20,6 +20,7 @@ export interface IPattenOptions {
   spacing: number;
   roundness: number;
   angle: number;
+  hardness: number;
   jitter: {
     size: number;
   }
@@ -41,6 +42,7 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
     spacing: 1,
     roundness: 1,
     angle: 0,
+    hardness: 1,
     jitter: {}
   } as T;
 
@@ -51,7 +53,7 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
 
   setOptions(options: Partial<typeof this.options>) {
     Object.assign(this.options, options);
-    if (objHas(options, 'color') || objHas(options, 'size') ||  objHas(options, 'roundness') || objHas(options, 'angle')) {
+    if (objHas(options, 'color') || objHas(options, 'size') ||  objHas(options, 'roundness') || objHas(options, 'angle') || objHas(options, 'hardness')) {
       this.drawPattern();
     }
   }
@@ -75,8 +77,6 @@ export default class BasePattern<T extends IPattenOptions = IPattenOptions> impl
       const range = Math.round(2 * size * staticSzie);
       const min = Math.round((1 - size) * staticSzie);
       option.size = Math.random() * range + min;
-      this.image.width = option.size;
-      this.image.height = option.size;
     }
     return Object.assign({}, this.getOptions(), option);
   }

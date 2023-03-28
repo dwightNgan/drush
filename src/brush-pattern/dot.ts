@@ -6,11 +6,14 @@ import BasePattern, { IPattenOptions } from "./base";
 export class Dot<T extends IPattenOptions = IPattenOptions> extends BasePattern<T> {
   drawPattern() {
     this.clearPattern();
-    const { size, color, roundness, angle } = this.getRuntimeOptions();
+    let { size, color, roundness, angle, hardness } = this.getRuntimeOptions();
     const center = size / 2;
+    const hardRadius = (center * hardness + center) / 4;
+    this.image.width = size;
+    this.image.height = size;
     const ctx = getContext(this.image);
     ctx.save();
-    ctx.fillStyle = color.toString();
+    
     // ctx.beginPath();
     // ctx.moveTo(0, 0);
     // ctx.lineTo(size, 0);
@@ -32,6 +35,15 @@ export class Dot<T extends IPattenOptions = IPattenOptions> extends BasePattern<
     ctx.beginPath();
     ctx.arc(center, center, center - 1, 0, deg(360))
     ctx.closePath();
+    ctx.fillStyle = color.toString();
+    if (size === 1 || hardness === 1) {
+      ctx.fillStyle = color.toString();
+    } else  {
+      const gradient = ctx.createRadialGradient(center, center, hardRadius, center, center, center);
+      gradient.addColorStop(0, color.fade(0).toString());
+      gradient.addColorStop(1, color.fade(1).toString());
+      ctx.fillStyle = gradient;
+    }
     ctx.fill();
 
     ctx.restore();

@@ -95,6 +95,10 @@ const paramFns = {
   angle: function changeAngle(e: Event) {
     const { value } = e.target as HTMLInputElement;
     drush.setOptions({ angle: +value });
+  },
+  hardness: function changeHardness(e: Event) {
+    const { value } = e.target as HTMLInputElement;
+    drush.setOptions({ hardness: +value });
   }
 }
 
